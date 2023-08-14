@@ -1,36 +1,39 @@
-import { keys } from '@vimeo/player';
+
 import throttle from 'lodash.throttle';
 const throttle = require('lodash.throttle');
 const feedback = document.querySelector(".feedback-form")
-//console.dir(feedback);
+ const emailInput = document.querySelector('input[name="email"]');
+ const messageInput = document.querySelector('textarea[name="message"]');
 
 feedback.addEventListener('input', throttle( (inputFeedback), 500));
-const form = {};
-const obj = JSON.parse(localStorage.getItem('feedback-form-state')) ?? []; 
+let form = {};
+updateForm();
+
 function inputFeedback(evt) {
     evt.preventDefault();
-    
-      console.dir(obj); 
-    
-    if (Object.keys(obj).length === 0) {
         form[evt.target.name] = evt.target.value;
         let jsonForm = JSON.stringify(form);
-        localStorage.setItem('feedback-form-state', jsonForm)}
-     else {  
-    
-    form[evt.target.name] = obj['evt.target.name'] + evt.target.value;
-    console.log(form);
-    let jsonForm = JSON.stringify(form);
-    localStorage.setItem('feedback-form-state', jsonForm);
+        localStorage.setItem('feedback-form-state', jsonForm)
     }
-}
-    //console.log(jsonForm);
 
- feedback.addEventListener('submit', resetInput)
+feedback.addEventListener('submit', resetInput)
 function resetInput(evt) {
-    
     evt.preventDefault();
-    console.log(form);
-    localStorage.clear();
-    evt.target.reset();
-}
+    if (emailInput.value === '' || messageInput.value === '') {
+        alert('Заповніть будь ласка усі поля форми');
+        return;
+            }
+            console.log(form);
+            localStorage.removeItem('feedback-form-state');
+            evt.currentTarget.reset();
+           form = {}
+        }
+
+        function updateForm() {
+            let savedFormData = localStorage.getItem('feedback-form-state');
+            if (savedFormData) {
+                form = JSON.parse(savedFormData) || {};
+                emailInput.value = form.email || '';
+                messageInput.value = form.message || '';
+            }
+        }
