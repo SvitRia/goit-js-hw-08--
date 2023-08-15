@@ -13,7 +13,7 @@ function fnTime(data){
 }
 const currentTime = localStorage.getItem('videoplayer-current-time');
 console.log(currentTime);
-player.setCurrentTime(currentTime)
+player.setCurrentTime(currentTime || 0)
 //.then(function(seconds) {
     // seconds = the actual time that the player seeked to
 //}).catch(function(error) {
